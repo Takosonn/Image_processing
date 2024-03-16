@@ -18,12 +18,12 @@ RGB555, RGB565, RGB444, RGB888
 RAW 一般配置为RGB565，刚好16位  
 ### 数据传输
 关键信号有  
-          cam_pclk            // 数据像素时钟 来自ov5640
-          cam_vsync           // 场同步信号 来自ov5640
-          cam_href            // 行同步信号 来自ov5640
+          cam_pclk            // 数据像素时钟 来自ov5640  
+          cam_vsync           // 场同步信号 来自ov5640  
+          cam_href            // 行同步信号 来自ov5640  
  [7:0]    cam_data            // 摄像头数据 来自ov5640                            
-          cam_frame_vsync     // 帧有效信号    
-          cam_frame_href      // 行有效信号
-          cam_frame_valid     // 数据有效信号
- [15:0]   cam_frame_data      // 有效数据 RGB888
+          cam_frame_vsync     // 帧有效信号  
+          cam_frame_href      // 行有效信号  
+          cam_frame_valid     // 数据有效信号  
+ [15:0]   cam_frame_data      // 有效数据 RGB888  
           cam_frame_dclk  
