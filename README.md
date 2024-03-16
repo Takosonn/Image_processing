@@ -1,6 +1,6 @@
 # 图像处理的学习与尝试
 
-关于 FPGA，Cemera，DDR，HDMI，部分 Deep Learning 内容
+关于 FPGA，Cemera，DDR，HDMI，AXI4，部分 Deep Learning 内容
 
 
 ## OV5640
