@@ -21,9 +21,11 @@ RAW 一般配置为RGB565，刚好16位
           cam_pclk            // 数据像素时钟 来自ov5640  
           cam_vsync           // 场同步信号 来自ov5640  
           cam_href            // 行同步信号 来自ov5640  
- [7:0]    cam_data            // 摄像头数据 来自ov5640                            
-          cam_frame_vsync     // 帧有效信号  
-          cam_frame_href      // 行有效信号  
-          cam_frame_valid     // 数据有效信号  
- [15:0]   cam_frame_data      // 有效数据 RGB888  
-          cam_frame_dclk  
+ [7:0]    cam_data            // 摄像头数据 来自ov5640  
+ 摄像头每1个PCLK输出8位图像数据，每2个PCLK输出一位完整像素16位RGB565  
+ 通过FPGA将其转化为完整16位输出到下游模块  
+ R4 R3 R2 R1 R0 G5 G4 G3; G2 G1 G0 B4 B3 B2 B1 B0;  
+ 行同步信号href和场同步信号vsync都是脉冲输出  
+ 代码中从第8帧开始算有效数据，舍弃前7帧后拉高帧有效  
+ 数据由AXI模块转化为标准AXI4_FULL格式输出  
+ 
