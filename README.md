@@ -33,3 +33,20 @@ RAW 一般配置为RGB565，刚好16位
 ### 概述
 理论上HDMI 2.1可以达到48Gbps的恐怖带宽，但这里我只对FPGA实现1.0作出尝试  
 HDMI2.0也许需要通过PHY芯片或者收发器去实现，有待以后探索  
+HDMI兼容DVI，区别是HDMI还可以传输音频  
+HDMI的精髓就在实现三个通道，含有8位RGB以及同步信号和控制信号  
+TMDS编码技术是实现了DC平衡的编码，8b/10b  
+首先实现VGA的时序，然后将data和同步送入rgb to dvi模块，转成dvi接口后输出  
+### dvi接口实现
+input        pclk,           // pixel clock  
+input        pclk_x5,        // pixel clock x5  
+input        reset_n,        // reset  
+input [23:0] video_din,      // RGB888 video in  
+input        video_hsync,    // hsync data  
+input        video_vsync,    // vsync data  
+input        video_de,       // data enable  
+output       tmds_clk_p,    // TMDS 时钟通道  
+output       tmds_clk_n,  
+output [2:0] tmds_data_p,   // TMDS 数据通道  
+output [2:0] tmds_data_n,  
+output       tmds_oen       // TMDS 输出使能  
