@@ -50,3 +50,9 @@ output       tmds_clk_n,
 output [2:0] tmds_data_p,   // TMDS 数据通道  
 output [2:0] tmds_data_n,  
 output       tmds_oen       // TMDS 输出使能  
+
+代码中三个通道分别进行编码，主要是输入一个PCLK，数据和同步  
+子模块encoder负责8b/10b的转换，是Xilinx的代码  
+子模块serializer是并转串行，十位转一位，采用两个Oserdes级联  
+ddr数据模式，需要PLL5倍的PCLK输入  
+最后在TOP用OBUFDS完成单端转差分，在物理层输出  
