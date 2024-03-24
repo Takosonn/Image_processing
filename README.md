@@ -52,7 +52,46 @@ output [2:0] tmds_data_n,
 output       tmds_oen       // TMDS 输出使能  
 
 代码中三个通道分别进行编码，主要是输入一个PCLK，数据和同步  
+
 子模块encoder负责8b/10b的转换，是Xilinx的代码  
 子模块serializer是并转串行，十位转一位，采用两个Oserdes级联  
 ddr数据模式，需要PLL5倍的PCLK输入  
 最后在TOP用OBUFDS完成单端转差分，在物理层输出  
+
+## AXI4
+### 概述
+AXI是AMBA第三代总线，第一代APB，第二代AHB  
+AXI的拓展是ACE，下一代AXI5，这里只对AXI4作出探索
+在我的理解中，AXI4是一种双向可靠高速片内传输总线，握手是它的核心思想  
+发送方“能够发送”时，拉高valid了，接收方“能够接收”时，拉高ready  
+只有两方互相确认传输的能力后，传输才会发起，这严格保障了传输的可靠性  
+同时，AXI分为memory mapped和stream两种方式
+前者分为LITE和最常见的FULL接口，为地址映射的可靠传输方式
+后者常用于流式传输中，不给地址，不告诉数量，只有last作为“阀门”  
+AXI中，总线双方必须共用一个总线时钟ACLK，跨时钟域时需要提前安排FIFO  
+### 架构
+基于以上机制，AXI总线总共有五个通道，分别负责不同流向的数据以及地址控制  
+读地址 （AR） read address  
+读数据 （R） read data  
+写地址 （AW） write address  
+写数据 （W） write data  
+写回复 （R） write response  
+#### 写传输
+1. 主机在写地址通道上告知burst内容长度以及address
+2. 在写数据通道上对齐传输数据
+3. 从机接收到Wlast后再写回复通道上回复主机
+#### 读传输
+1. 主机在读地址通道上告知burst内容长度以及address
+2. 在读数据通道上对齐传输数据
+### Burst
+
+
+
+
+
+
+
+
+
+
+
