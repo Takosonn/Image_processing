@@ -122,7 +122,39 @@ myip_v1_0_M00_AXI.v 是实现AXI主机的核心代码，其中M00表示ID号
 在学习图像处理时我使用 MIG ip 核去封装DDR3  
 主要还是对mig的学习，如何把ddr3简单的使用在FPGA上  
 对于其他的DDR3内容，在别的项目中呈现  
-
+### ddr
+mig是Xilinx耳熟能详的IP核之一，封装了FPGA和ddr3的代码  
+ddr3的address从小到大主要是行row，列column，块bank，    
+一个die可有多个bank，多个die组成内存条则成为rank  
+MR寄存器是配置ddr3的寄存器  
+MR2用来存储控制更新的特性， 阻抗，和CAS写长度。  
+MR3用来控制MPR。  
+MR1用来存储是否使能DLL、输出驱动长度、Rtt_Nom、额外长度、写电平使能等。  
+MR0用来存储DDR3的不同操作模式的数据：包括突发长度、读取突发种类、CAS长度、测试模式、DLL复位等。  
+上电 初始化 校准 之后才开始读写数据  
+ddr3读写均采用burst，还可以通过控制线的上下拉瞬间作出各种指令  
+控制线指的是CS,RAS,CAS,WE,BA,RST等  
+### MIG
+mig主要做的就是把这些初始化、读写请求封装起来  
+让数据流和命令变得简单直接，用户只要访问mig封装好的上层读写就好  
+mig是一种类似硬核的存在，fpga有专门针对sdram优化的bank  
+而mig的很多需要的硬件资源以及布局布线资源就存在于这些bank中  
+所以mig对于硬件设计是有要求的，为了在厂家的特定fpga上达到最高效率  
+时钟输入：  
+reference clock and system clock  
+系统时钟给pll产生读写   
+ref时钟专门给idelay使用  
+地址和命令通过out fifo被phaser out移出去  
+数据通过in fifo 移进来 out fifo 移出去  
+输出和输入都需要serdes来进行串并转换  
+通常读写周期：  
+收到请求  
+激活行  
+锁定列  
+precharge目标行  
+回到IDLE  
+ddr中的读写并不是逐行逐列的，而是对性能作出优化的结果  
+实际的行和列和上层软件反馈的并不一样  
 
 
 
